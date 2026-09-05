@@ -31,6 +31,8 @@ $rutas = [
     'crear'   => ['EventoController', 'crear'],
     'guardar' => ['EventoController', 'guardar'],
     'listar'  => ['EventoController', 'listar'],
+    'buscar'  => ['EventoController', 'buscar'],
+    'eliminar' => ['EventoController', 'eliminar'],
     'bitacora' => ['BitacoraController', 'listar'],
 ];
 

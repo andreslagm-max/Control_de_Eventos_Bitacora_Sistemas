@@ -75,7 +75,81 @@ class EventoController extends Controlador
         $eventos = $this->eventos->obtenerTodos();
         $this->bitacora->registrar(Bitacora::CONSULTAR, null, sprintf('Consulta general de eventos (%d registros)', count($eventos)));
 
-        $this->vista('eventos/listar', ['eventos' => $eventos]);
+        $this->vista('eventos/listar', ['eventos' => $eventos, 'filtros' => $this->filtrosVacios()]);
+    }
+
+    /**
+     * Búsqueda por texto y filtros de tipo/estado (GET). Los filtros que
+     * no pertenecen al catálogo se descartan en silencio.
+     */
+    public function buscar(): void
+    {
+        $filtros = [
+            'q'      => mb_substr($this->campo($_GET, 'q'), 0, 100),
+            'tipo'   => $this->campo($_GET, 'tipo'),
+            'estado' => $this->campo($_GET, 'estado'),
+        ];
+        if (!in_array($filtros['tipo'], TIPOS_EVENTO, true)) {
+            $filtros['tipo'] = '';
+        }
+        if (!in_array($filtros['estado'], ESTADOS_EVENTO, true)) {
+            $filtros['estado'] = '';
+        }
+
+        $eventos = $this->eventos->buscar($filtros['q'], $filtros['tipo'], $filtros['estado']);
+
+        $criterios = array_filter([
+            $filtros['q'] !== '' ? 'texto "' . $filtros['q'] . '"' : null,
+            $filtros['tipo'] !== '' ? 'tipo ' . $filtros['tipo'] : null,
+            $filtros['estado'] !== '' ? 'estado ' . $filtros['estado'] : null,
+        ]);
+        $this->bitacora->registrar(
+            Bitacora::BUSCAR,
+            null,
+            sprintf('Búsqueda por %s (%d resultados)', $criterios === [] ? 'sin criterios' : implode(', ', $criterios), count($eventos))
+        );
+
+        $this->vista('eventos/listar', ['eventos' => $eventos, 'filtros' => $filtros, 'buscando' => true]);
+    }
+
+    /**
+     * Elimina un evento. Solo por POST con token CSRF: un enlace GET no
+     * debe poder borrar datos.
+     */
+    public function eliminar(): void
+    {
+        if (!$this->esPost()) {
+            redirigir('listar');
+        }
+
+        if (!csrf_valido($_POST['csrf_token'] ?? null)) {
+            mensaje_flash('error', 'Token de seguridad inválido. No se eliminó el evento.');
+            redirigir('listar');
+        }
+
+        $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+        $evento = $id === false ? null : $this->eventos->obtenerPorId($id);
+
+        if ($evento === null) {
+            mensaje_flash('error', 'El evento indicado no existe o ya fue eliminado.');
+            redirigir('listar');
+        }
+
+        $this->eventos->eliminar($id);
+        // evento_id va en null porque el evento ya no existe; el id queda en el detalle.
+        $this->bitacora->registrar(
+            Bitacora::ELIMINAR,
+            null,
+            sprintf('Evento #%d eliminado: %s en %s (%s)', $id, $evento['tipo'], $evento['sistema'], $evento['estado'])
+        );
+
+        mensaje_flash('exito', sprintf('Evento #%d eliminado. El borrado quedó registrado en la bitácora.', $id));
+        redirigir('listar');
+    }
+
+    private function filtrosVacios(): array
+    {
+        return ['q' => '', 'tipo' => '', 'estado' => ''];
     }
 
     /* ------------------------------------------------------------------
