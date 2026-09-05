@@ -19,10 +19,12 @@ header('Referrer-Policy: same-origin');
 define('BASE_PATH', __DIR__);
 
 require BASE_PATH . '/config/funciones.php';
+require BASE_PATH . '/config/catalogos.php';
 
 // Lista blanca de acciones -> vista que se muestra.
 $rutas = [
     'inicio' => 'views/inicio.php',
+    'crear'  => 'views/eventos/crear.php',
 ];
 
 $accion = $_GET['accion'] ?? 'inicio';
