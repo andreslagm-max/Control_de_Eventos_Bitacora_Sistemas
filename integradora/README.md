@@ -31,7 +31,23 @@ qué dirección IP.
 
 ---
 
-## 2. Instalación en XAMPP
+## 2. Tecnologías utilizadas
+
+| Capa | Tecnología | Uso en el proyecto |
+|---|---|---|
+| Servidor | **PHP 8** (orientado a objetos, `declare(strict_types=1)`) | Controladores, modelos y enrutador |
+| Base de datos | **MySQL / MariaDB** (XAMPP) | Base `integradora` con tablas `eventos` y `bitacora` |
+| Acceso a datos | **PDO** con sentencias preparadas | Modelos `Evento` y `Bitacora` |
+| Estructura | **HTML5** semántico | Vistas: formularios, tablas, mensajes |
+| Estilos | **CSS3** propio (variables, Flexbox, Grid, gradientes) | `css/estilos.css`, sin frameworks externos |
+| Cliente | **JavaScript** (ES5, sin librerías) | Validaciones, contador de caracteres, confirmación de borrado |
+| Patrón | **MVC** (Modelo · Vista · Controlador) | Separación de responsabilidades en carpetas |
+| Control de versiones | **Git + GitHub** | 11 commits que evidencian el avance del proyecto |
+| Entorno local | **XAMPP** (Apache + PHP + MySQL) | Ejecución en `http://localhost/` |
+
+---
+
+## 3. Instalación en XAMPP
 
 1. Instala [XAMPP](https://www.apachefriends.org/) (Apache + PHP 8 + MySQL/MariaDB) y arranca **Apache** y **MySQL**.
 2. Copia la carpeta `integradora/` dentro de `C:\xampp\htdocs\` (en Linux o macOS, en `htdocs/` de tu instalación).
@@ -49,7 +65,7 @@ MySQL tiene clave, cámbiala en `config/conexion.php`.
 
 ---
 
-## 3. Estructura del proyecto
+## 4. Estructura del proyecto
 
 ```
 integradora/
@@ -102,7 +118,7 @@ Navegador ──GET/POST──▶ index.php ──▶ Controlador ──▶ Mode
 
 ---
 
-## 4. Base de datos
+## 5. Base de datos
 
 **Tabla principal `eventos`**
 
@@ -126,7 +142,7 @@ no se pierda), `detalle`, `ip_origen`, `agente` y `fecha_hora`.
 
 ---
 
-## 5. Validaciones
+## 6. Validaciones
 
 **En el navegador (`js/script.js`)**, antes de enviar:
 
@@ -150,7 +166,7 @@ y el mensaje de cada campo.
 
 ---
 
-## 6. Seguridad aplicada
+## 7. Seguridad aplicada
 
 - **Inyección SQL:** todo el acceso a datos usa PDO con sentencias preparadas y
   `PDO::ATTR_EMULATE_PREPARES = false`. La búsqueda pasa el término como
@@ -172,7 +188,7 @@ y el mensaje de cada campo.
 
 ---
 
-## 7. Capturas
+## 8. Capturas
 
 | Formulario de registro | Consulta de eventos |
 |---|---|
@@ -184,7 +200,7 @@ y el mensaje de cada campo.
 
 ---
 
-## 8. Pruebas realizadas
+## 9. Pruebas realizadas
 
 - Formulario vacío, valores fuera de rango, fecha futura, correo inválido y
   descripción mayor a 500 caracteres: bloqueados por JavaScript.
