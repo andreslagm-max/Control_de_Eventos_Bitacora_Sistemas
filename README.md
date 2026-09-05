@@ -1,13 +1,14 @@
-# Control de Eventos de Sistemas con Bitácora
+# SysTrace · Control de Eventos y Bitácora de Sistemas
 
-**Autor:** Luis Andrés García Mendoza
+**Autor:** Luis Andrés García Mendoza · Actividad Integradora 3
 
-Aplicación web en **PHP + MySQL** con arquitectura **MVC** para la Actividad Integradora 3.
+Aplicación web en **PHP + MySQL** con arquitectura **MVC** que registra los
+eventos que ocurren en los sistemas de una organización (incidentes,
+mantenimientos, alertas, cambios y respaldos) y mantiene una **bitácora
+automática** de cada acción realizada en la aplicación.
 
-Permite registrar los eventos que ocurren en los sistemas de una organización (incidentes, mantenimientos,
-alertas, cambios, respaldos), consultarlos en una tabla y mantener una **bitácora automática** de todas las
-acciones realizadas en la aplicación.
+- **Código de la aplicación y manual de instalación:** [`integradora/`](integradora/) → [`integradora/README.md`](integradora/README.md)
+- **Plan de desarrollo, arquitectura y cronograma:** [`PLAN_DESARROLLO.md`](PLAN_DESARROLLO.md)
+- **Base de datos:** `integradora` · usuario `root` sin clave · script en [`integradora/sql/integradora.sql`](integradora/sql/integradora.sql)
 
-- Plan de desarrollo, arquitectura, modelo de datos y cronograma: [`PLAN_DESARROLLO.md`](PLAN_DESARROLLO.md)
-- Código de la aplicación: carpeta `integradora/` (en construcción)
-- Base de datos: `integradora` · usuario `root` sin clave
+![SysTrace](integradora/docs/capturas/01-inicio.jpg)

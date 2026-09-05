@@ -28,7 +28,7 @@
 
 ## 2. Tema y alcance
 
-**Nombre de la aplicación:** *SysLog Control — Control de Eventos de Sistemas*
+**Nombre de la aplicación:** *SysTrace — Control de Eventos y Bitácora de Sistemas*
 
 Un equipo de soporte/infraestructura registra los **eventos** que ocurren en los sistemas de una organización
 (incidentes, mantenimientos, alertas, cambios, respaldos) y la aplicación mantiene una **bitácora** automática
@@ -127,6 +127,10 @@ integradora/
 
 ## 5. Modelo de datos (`sql/integradora.sql`)
 
+### Identidad visual
+
+Paleta orientada a tecnología: fondo azul profundo (`#070b14`), acento cian (`#22d3ee`) y violeta (`#8b5cf6`), semáforo verde/ámbar/rojo para severidad y estado. El fondo es una rejilla con brillos radiales hecha solo con CSS (sin imágenes), con tipografía monoespaciada en etiquetas y cifras para reforzar el aire de consola de operaciones.
+
 ### Tabla principal: `eventos`
 
 | Columna | Tipo | Regla | Validación JS asociada |
@@ -200,24 +204,26 @@ Aunque la rúbrica no lo exige, es parte del valor del proyecto y de tu perfil:
 
 ---
 
-## 8. Plan de commits y cronograma
+## 8. Plan de commits y estado
 
-Mínimo 7 commits del PDF; se planifican 10 para que cada uno sea un avance real y verificable.
+Mínimo 7 commits del PDF; se hicieron 10, cada uno con su propia revisión y pruebas antes de pasar al siguiente.
 
-| # | Commit (mensaje sugerido) | Contenido | Día |
-|---|---|---|---|
-| 1 | `Creación de estructura inicial del proyecto` | Carpetas, `index.php` con enrutador vacío, `README.md` inicial | Vie 5/9 |
-| 2 | `Diseño de interfaz principal` | `layout/header.php`, `layout/footer.php`, `views/inicio.php`, `css/estilos.css` (paleta, nav, tarjetas) | Vie 5/9 |
-| 3 | `Creación del formulario de registro de eventos` | `views/eventos/crear.php` con todos los campos y estilos | Sáb 6/9 |
-| 4 | `Agregadas validaciones con JavaScript` | `js/script.js`: reglas de la sección 6, mensajes por campo, contador de caracteres | Sáb 6/9 |
-| 5 | `Configuración de conexión con MySQL` | `config/conexion.php` (PDO) y `sql/integradora.sql` con tablas y datos de ejemplo | Sáb 6/9 |
-| 6 | `Implementación del modelo y controlador` | `models/Evento.php`, `models/Bitacora.php`, `controllers/EventoController.php`, rutas en `index.php` | Dom 7/9 |
-| 7 | `Registro y consulta de eventos desde MySQL` | `guardar()` → INSERT, `listar()` → tabla HTML, mensajes de éxito/error, validación en servidor | Dom 7/9 |
-| 8 | `Bitácora automática y vista de auditoría` | `Bitacora::registrar()` llamado desde cada acción, `BitacoraController`, `views/bitacora/listar.php` | Dom 7/9 |
-| 9 | `Búsqueda y eliminación de eventos` | Filtro por sistema/tipo/estado, botón eliminar con confirmación y token CSRF | Lun 8/9 (mañana) |
-| 10 | `Documentación, script SQL final y ajustes de interfaz` | README con pasos de instalación en XAMPP, capturas, revisión final de estilos | Lun 8/9 (mediodía) |
+| # | Commit | Contenido | Pruebas que pasó | Estado |
+|---|---|---|---|---|
+| 1 | `Creación de estructura inicial del proyecto` | Carpetas MVC, `index.php` con lista blanca, funciones auxiliares, 404 | Sintaxis PHP, inicio 200, acción inválida 404, cabeceras de seguridad | ✅ |
+| 2 | `Diseño de interfaz principal` | Layout, inicio, `css/estilos.css` con paleta tecnológica y fondo de rejilla | Render en Chromium, navegación activa, CSS servido | ✅ |
+| 3 | `Creación del formulario de registro de eventos` | `views/eventos/crear.php`, `config/catalogos.php`, token CSRF | 10 campos con `name` correcto, opciones de catálogo, token de 64 hex | ✅ |
+| 4 | `Agregadas validaciones con JavaScript` | `js/script.js` con reglas por campo, contador, confirmación de borrado | 16 pruebas en Chromium: vacíos, numéricos, longitud, valores incorrectos, correo, envío válido | ✅ |
+| 5 | `Configuración de conexión con MySQL` | `config/conexion.php` (PDO) y `sql/integradora.sql` | Importación limpia, reimportación, CHECK de severidad, `ON DELETE SET NULL`, conexión desde PHP | ✅ |
+| 6 | `Implementación del modelo y controlador` | `models/Evento.php`, `controllers/Controlador.php`, `EventoController`, enrutador a controladores | 16 pruebas del modelo en transacción (insertar, buscar, eliminar, resumen, inyección SQL), error de BD controlado | ✅ |
+| 7 | `Registro y consulta de eventos desde MySQL` | `guardar()` con validación en servidor e INSERT, `listar()` en tabla HTML, mensajes flash | 15 pruebas HTTP: CSRF, GET rechazado, POST inválido repoblado, POST válido, XSS escapado, flash de un solo uso | ✅ |
+| 8 | `Bitácora automática y vista de auditoría` | `models/Bitacora.php`, `BitacoraController`, vista, `SET NAMES utf8mb4` en el SQL | Rastro REGISTRAR con IP y navegador, CONSULTAR sin evento, acción fuera de catálogo rechazada, acentos correctos | ✅ |
+| 9 | `Búsqueda y eliminación de eventos` | Filtros GET, eliminación POST con CSRF y confirmación, rastros BUSCAR y ELIMINAR | 22 pruebas HTTP + 5 en Chromium: filtros, inyección, GET no borra, token inválido, id inexistente, `confirm()` cancelar/aceptar | ✅ |
+| 10 | `Documentación y ajustes finales` | README de instalación con capturas, menú activo en búsqueda, regresión completa | Suite completa sobre base recién importada | ✅ |
 
-**Reserva:** la tarde del lunes 8/9 queda libre para probar todo desde cero (importar el SQL en un XAMPP limpio) y subir la entrega en Blackboard antes de las 23:30. No dejar la entrega para la última hora.
+**Corrección encontrada por las pruebas:** con sentencias preparadas nativas de MySQL no se puede repetir el mismo marcador (`:termino`) en una consulta; se usaron tres marcadores distintos. El script SQL importado por consola corrompía los acentos; se fijó `SET NAMES utf8mb4` al inicio.
+
+**Reserva:** probar todo desde cero en el XAMPP local (importar el SQL, registrar, buscar, eliminar, ver la bitácora) y subir la entrega en Blackboard antes del lunes 8/9 a las 23:30.
 
 ---
 

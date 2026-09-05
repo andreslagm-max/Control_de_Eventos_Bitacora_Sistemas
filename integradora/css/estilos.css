@@ -287,7 +287,7 @@ a:hover { text-decoration: underline; }
 .tabla tbody tr:hover { background: rgba(34, 211, 238, 0.05); }
 .tabla tbody tr:last-child td { border-bottom: none; }
 .tabla .mono { font-family: var(--mono); font-size: 0.85rem; color: var(--texto-suave); }
-.tabla .col-descripcion { min-width: 320px; max-width: 520px; }
+.tabla .col-descripcion { min-width: 260px; max-width: 520px; }
 .tabla .col-detalle { min-width: 280px; }
 .tabla .vacio { text-align: center; color: var(--texto-suave); padding: 28px; }
 

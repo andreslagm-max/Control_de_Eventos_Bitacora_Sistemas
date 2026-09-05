@@ -5,6 +5,8 @@
  */
 $titulo = $titulo ?? 'SysTrace';
 $accionActual = $_GET['accion'] ?? 'inicio';
+// Acciones secundarias que se resaltan bajo su entrada principal del menú.
+$accionActual = ['buscar' => 'listar', 'eliminar' => 'listar', 'guardar' => 'crear'][$accionActual] ?? $accionActual;
 $menu = [
     'inicio'   => 'Inicio',
     'crear'    => 'Registrar evento',
