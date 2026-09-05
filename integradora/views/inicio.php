@@ -1,5 +1,7 @@
 <?php
-$titulo = 'Inicio';
+$titulo  = 'Inicio';
+$resumen = $resumen ?? ['total' => 0, 'activos' => 0, 'criticos' => 0, 'resueltos' => 0];
+$ultimos = $ultimos ?? [];
 require BASE_PATH . '/views/layout/header.php';
 ?>
 
@@ -13,6 +15,25 @@ require BASE_PATH . '/views/layout/header.php';
     <div class="hero-acciones">
         <a class="boton boton-primario" href="<?= e(url('crear')) ?>">+ Registrar evento</a>
         <a class="boton boton-secundario" href="<?= e(url('listar')) ?>">Ver eventos</a>
+    </div>
+</section>
+
+<section class="metricas" aria-label="Resumen de eventos">
+    <div class="metrica">
+        <div class="metrica-valor"><?= (int) $resumen['total'] ?></div>
+        <div class="metrica-etiqueta">Eventos registrados</div>
+    </div>
+    <div class="metrica">
+        <div class="metrica-valor"><?= (int) $resumen['activos'] ?></div>
+        <div class="metrica-etiqueta">Activos (abiertos / en proceso)</div>
+    </div>
+    <div class="metrica">
+        <div class="metrica-valor critico"><?= (int) $resumen['criticos'] ?></div>
+        <div class="metrica-etiqueta">Activos de severidad alta o crítica</div>
+    </div>
+    <div class="metrica">
+        <div class="metrica-valor ok"><?= (int) $resumen['resueltos'] ?></div>
+        <div class="metrica-etiqueta">Resueltos / cerrados</div>
     </div>
 </section>
 

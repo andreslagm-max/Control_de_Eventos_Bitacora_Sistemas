@@ -3,9 +3,11 @@
  * SysTrace - Control de Eventos y Bitácora de Sistemas
  * Punto de entrada único (front controller).
  *
+ * Flujo: Vista -> Controlador -> Modelo -> MySQL.
  * Toda petición llega aquí con ?accion=... y se despacha según una
- * lista blanca. Cualquier acción desconocida devuelve 404, nunca se
- * incluye un archivo a partir de lo que llegue en la URL.
+ * lista blanca de acciones -> [controlador, método]. Cualquier acción
+ * desconocida devuelve 404; nunca se incluye un archivo a partir de lo
+ * que llegue en la URL.
  */
 declare(strict_types=1);
 
@@ -20,11 +22,12 @@ define('BASE_PATH', __DIR__);
 
 require BASE_PATH . '/config/funciones.php';
 require BASE_PATH . '/config/catalogos.php';
+require BASE_PATH . '/config/conexion.php';
 
-// Lista blanca de acciones -> vista que se muestra.
+// Lista blanca de acciones -> [controlador, método].
 $rutas = [
-    'inicio' => 'views/inicio.php',
-    'crear'  => 'views/eventos/crear.php',
+    'inicio' => ['EventoController', 'inicio'],
+    'crear'  => ['EventoController', 'crear'],
 ];
 
 $accion = $_GET['accion'] ?? 'inicio';
@@ -35,4 +38,14 @@ if (!is_string($accion) || !isset($rutas[$accion])) {
     exit;
 }
 
-require BASE_PATH . '/' . $rutas[$accion];
+[$controlador, $metodo] = $rutas[$accion];
+require BASE_PATH . '/controllers/' . $controlador . '.php';
+
+try {
+    (new $controlador())->$metodo();
+} catch (PDOException $excepcion) {
+    // Nunca se muestra el detalle SQL al usuario; queda en el log del servidor.
+    error_log('[SysTrace] Error de base de datos: ' . $excepcion->getMessage());
+    http_response_code(500);
+    require BASE_PATH . '/views/error.php';
+}
