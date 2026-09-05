@@ -42,3 +42,6 @@ $menu = [
 </header>
 
 <main class="contenido">
+<?php if ($flash = obtener_mensaje_flash()): ?>
+    <div class="mensaje mensaje-<?= e($flash['tipo']) ?>" role="status"><?= e($flash['texto']) ?></div>
+<?php endif; ?>

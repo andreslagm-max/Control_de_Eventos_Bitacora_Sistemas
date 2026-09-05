@@ -51,3 +51,46 @@ function csrf_valido(?string $token): bool
         && !empty($_SESSION['csrf_token'])
         && hash_equals($_SESSION['csrf_token'], $token);
 }
+
+/**
+ * Guarda un mensaje en sesión para mostrarlo en la siguiente página.
+ * $tipo: exito | error | info
+ */
+function mensaje_flash(string $tipo, string $texto): void
+{
+    $_SESSION['flash'] = ['tipo' => $tipo, 'texto' => $texto];
+}
+
+/**
+ * Devuelve el mensaje pendiente (una sola vez) o null.
+ */
+function obtener_mensaje_flash(): ?array
+{
+    if (empty($_SESSION['flash'])) {
+        return null;
+    }
+    $mensaje = $_SESSION['flash'];
+    unset($_SESSION['flash']);
+    return $mensaje;
+}
+
+/**
+ * Formatea una fecha de MySQL (Y-m-d H:i:s) para mostrarla en pantalla.
+ */
+function fecha_legible(?string $fecha): string
+{
+    if ($fecha === null || $fecha === '') {
+        return '';
+    }
+    $objeto = DateTime::createFromFormat('Y-m-d H:i:s', $fecha);
+    return $objeto ? $objeto->format('d/m/Y H:i') : $fecha;
+}
+
+/**
+ * Convierte un valor a clase CSS segura (minúsculas, guiones).
+ */
+function clase_css(string $valor): string
+{
+    $valor = strtolower(trim($valor));
+    return preg_replace('/[^a-z0-9]+/', '-', $valor) ?? '';
+}

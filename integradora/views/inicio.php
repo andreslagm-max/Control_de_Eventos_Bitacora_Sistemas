@@ -55,4 +55,35 @@ require BASE_PATH . '/views/layout/header.php';
     </article>
 </section>
 
+<?php if ($ultimos !== []): ?>
+<section class="panel" style="margin-top: 36px;">
+    <div class="panel-cabecera">
+        <div>
+            <p class="hero-etiqueta">// actividad reciente</p>
+            <h1>Últimos eventos</h1>
+        </div>
+        <a class="boton boton-secundario" href="<?= e(url('listar')) ?>">Ver todos</a>
+    </div>
+    <div class="tabla-contenedor">
+        <table class="tabla">
+            <thead>
+                <tr><th>ID</th><th>Fecha</th><th>Sistema</th><th>Tipo</th><th>Sev.</th><th>Estado</th></tr>
+            </thead>
+            <tbody>
+            <?php foreach ($ultimos as $evento): ?>
+                <tr>
+                    <td class="mono">#<?= (int) $evento['id'] ?></td>
+                    <td class="mono"><?= e(fecha_legible($evento['fecha_evento'])) ?></td>
+                    <td><?= e($evento['sistema']) ?></td>
+                    <td><?= e($evento['tipo']) ?></td>
+                    <td><span class="etiqueta sev-<?= (int) $evento['severidad'] ?>"><?= (int) $evento['severidad'] ?></span></td>
+                    <td><span class="etiqueta estado-<?= e(clase_css($evento['estado'])) ?>"><?= e($evento['estado']) ?></span></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</section>
+<?php endif; ?>
+
 <?php require BASE_PATH . '/views/layout/footer.php'; ?>

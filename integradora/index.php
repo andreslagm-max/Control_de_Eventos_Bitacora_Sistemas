@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 session_start();
+date_default_timezone_set('America/Guayaquil');
 
 header('Content-Type: text/html; charset=UTF-8');
 header('X-Content-Type-Options: nosniff');
@@ -26,8 +27,10 @@ require BASE_PATH . '/config/conexion.php';
 
 // Lista blanca de acciones -> [controlador, método].
 $rutas = [
-    'inicio' => ['EventoController', 'inicio'],
-    'crear'  => ['EventoController', 'crear'],
+    'inicio'  => ['EventoController', 'inicio'],
+    'crear'   => ['EventoController', 'crear'],
+    'guardar' => ['EventoController', 'guardar'],
+    'listar'  => ['EventoController', 'listar'],
 ];
 
 $accion = $_GET['accion'] ?? 'inicio';
