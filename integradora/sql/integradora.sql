@@ -7,6 +7,10 @@
 --   mysql -u root < sql/integradora.sql
 -- =====================================================================
 
+-- Garantiza que el texto con acentos se interprete como UTF-8 aunque el
+-- cliente que importa el script use otra codificación por defecto.
+SET NAMES utf8mb4;
+
 CREATE DATABASE IF NOT EXISTS integradora
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;

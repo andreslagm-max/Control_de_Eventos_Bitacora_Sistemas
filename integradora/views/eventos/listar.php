@@ -48,7 +48,7 @@ require BASE_PATH . '/views/layout/header.php';
                                 <?= (int) $evento['severidad'] ?> · <?= e(SEVERIDADES[(int) $evento['severidad']] ?? '') ?>
                             </span>
                         </td>
-                        <td><?= e($evento['descripcion']) ?></td>
+                        <td class="col-descripcion"><?= e($evento['descripcion']) ?></td>
                         <td>
                             <?= e($evento['responsable']) ?><br>
                             <span class="mono"><?= e($evento['correo_responsable']) ?></span>

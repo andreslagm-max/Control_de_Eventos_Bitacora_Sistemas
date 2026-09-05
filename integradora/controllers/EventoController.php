@@ -7,14 +7,17 @@ declare(strict_types=1);
 
 require_once BASE_PATH . '/controllers/Controlador.php';
 require_once BASE_PATH . '/models/Evento.php';
+require_once BASE_PATH . '/models/Bitacora.php';
 
 class EventoController extends Controlador
 {
     private Evento $eventos;
+    private Bitacora $bitacora;
 
     public function __construct()
     {
-        $this->eventos = new Evento();
+        $this->eventos  = new Evento();
+        $this->bitacora = new Bitacora();
     }
 
     /** Panel de inicio con cifras y últimos eventos. */
@@ -56,6 +59,11 @@ class EventoController extends Controlador
         }
 
         $id = $this->eventos->insertar($datos);
+        $this->bitacora->registrar(
+            Bitacora::REGISTRAR,
+            $id,
+            sprintf('Evento #%d registrado: %s en %s (severidad %d)', $id, $datos['tipo'], $datos['sistema'], $datos['severidad'])
+        );
 
         mensaje_flash('exito', sprintf('Evento #%d registrado correctamente: %s en %s.', $id, $datos['tipo'], $datos['sistema']));
         redirigir('listar');
@@ -64,9 +72,10 @@ class EventoController extends Controlador
     /** Consulta de todos los eventos en una tabla HTML. */
     public function listar(): void
     {
-        $this->vista('eventos/listar', [
-            'eventos' => $this->eventos->obtenerTodos(),
-        ]);
+        $eventos = $this->eventos->obtenerTodos();
+        $this->bitacora->registrar(Bitacora::CONSULTAR, null, sprintf('Consulta general de eventos (%d registros)', count($eventos)));
+
+        $this->vista('eventos/listar', ['eventos' => $eventos]);
     }
 
     /* ------------------------------------------------------------------

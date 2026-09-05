@@ -31,6 +31,7 @@ $rutas = [
     'crear'   => ['EventoController', 'crear'],
     'guardar' => ['EventoController', 'guardar'],
     'listar'  => ['EventoController', 'listar'],
+    'bitacora' => ['BitacoraController', 'listar'],
 ];
 
 $accion = $_GET['accion'] ?? 'inicio';
