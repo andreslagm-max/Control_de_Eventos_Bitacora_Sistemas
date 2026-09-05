@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 · SysTrace</title>
-</head>
-<body>
-    <h1>404 · Acción no encontrada</h1>
-    <p>La acción solicitada no existe. <a href="<?= e(url('inicio')) ?>">Volver al inicio</a></p>
-</body>
-</html>
+<?php
+$titulo = 'No encontrado';
+require BASE_PATH . '/views/layout/header.php';
+?>
+<section class="panel panel-centrado">
+    <p class="hero-etiqueta">// error 404</p>
+    <h1>Acción no encontrada</h1>
+    <p class="texto-suave">La ruta solicitada no existe en SysTrace.</p>
+    <a class="boton boton-primario" href="<?= e(url('inicio')) ?>">Volver al inicio</a>
+</section>
+<?php require BASE_PATH . '/views/layout/footer.php'; ?>
